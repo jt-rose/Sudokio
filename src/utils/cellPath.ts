@@ -3,20 +3,20 @@ import * as R from 'ramda'
 /* ---------------------------------- types --------------------------------- */
 
 // indexed location on sudoku puzzle, ie: 8 corresponds to cell 9
-type GridLocation = number
+export type CellIndex = number
 
 // group of cell indexes that can be checked to see if they fall into
 // a specific row, column, or box
-type GridParam = number[]
+export type GridParam = number[]
 
 // unique sets of rows, columns, and boxes
-type ParamSet = number[]
+export type ParamSet = number[]
 
 // possible answers for a given cell or param
-type AnswerOptions = number | number[]
+export type AnswerOptions = number | number[]
 
 // 81 length array to hold solved cells and anser options for unsolved cells
-type SudokuGrid = (number | number[])[]
+export type SudokuGrid = (number | number[])[]
 
 /* ------- util functions to traverse sudoku puzzle and analyze values ------ */
 
@@ -52,20 +52,20 @@ export const cellPath = {
 }
 
 // Get rows, columns, and boxes related to each cell
-export const getRow = (gridLocation: GridLocation) => {
-  const rowStart = gridLocation - (gridLocation % 9)
+export const getRow = (cellIndex: CellIndex) => {
+  const rowStart = cellIndex - (cellIndex % 9)
   return [0, 1, 2, 3, 4, 5, 6, 7, 8].map((x) => rowStart + x)
 }
 
-export const getColumn = (gridLocation: GridLocation) => {
-  const colStart = gridLocation % 9
+export const getColumn = (cellIndex: CellIndex) => {
+  const colStart = cellIndex % 9
   return [0, 1, 2, 3, 4, 5, 6, 7, 8].map((x) => x * 9 + colStart)
 }
 
-export function getBox(gridLocation: GridLocation) {
+export function getBox(cellIndex: CellIndex) {
   // topleft corner of each box
   const boxStartingPosition = [0, 3, 6, 27, 30, 33, 54, 57, 60]
-  const boxWall = gridLocation - (gridLocation % 3)
+  const boxWall = cellIndex - (cellIndex % 3)
   const boxCorner = boxStartingPosition.find(
     (x) => x === boxWall || x === boxWall - 9 || x === boxWall - 18
   ) as number
@@ -74,19 +74,19 @@ export function getBox(gridLocation: GridLocation) {
   return boxParameters.map((x) => x + boxCorner)
 }
 
-export function getRowNumber(gridLocation: GridLocation) {
-  return Math.floor(gridLocation / 9)
+export function getRowNumber(cellIndex: CellIndex) {
+  return Math.floor(cellIndex / 9)
 }
 
-export function getColumnNumber(gridLocation: GridLocation) {
-  return gridLocation % 9
+export function getColumnNumber(cellIndex: CellIndex) {
+  return cellIndex % 9
 }
 
-export function getBoxNumber(gridLocation: GridLocation) {
+export function getBoxNumber(cellIndex: CellIndex) {
   const boxStartingPosition = [0, 3, 6, 27, 30, 33, 54, 57, 60]
   const boxParameters = [0, 1, 2, 9, 10, 11, 18, 19, 20]
   const boxes = boxStartingPosition.map((x) => boxParameters.map((y) => x + y))
-  return boxes.findIndex((x) => x.includes(gridLocation))
+  return boxes.findIndex((x) => x.includes(cellIndex))
 }
 
 export function includesEach(gridParam: GridParam, paramSet: ParamSet) {
@@ -109,10 +109,10 @@ export function getParam(gridParam: GridParam) {
   return false
 }
 
-export function getRelCell(gridLocation: GridLocation) {
-  const allRelCell = getRow(gridLocation).concat(
-    getColumn(gridLocation),
-    getBox(gridLocation)
+export function getRelCell(cellIndex: CellIndex) {
+  const allRelCell = getRow(cellIndex).concat(
+    getColumn(cellIndex),
+    getBox(cellIndex)
   )
   return [...new Set(allRelCell)]
 }
@@ -206,7 +206,7 @@ export function getOpenExternal(
   )
 }
 
-const convertToArray = (answerArray: AnswerOptions) =>
+export const convertToArray = (answerArray: AnswerOptions) =>
   typeof answerArray === 'number' ? [answerArray] : answerArray
 
 // get external cells in cross-referenced param while filtering out indexes
