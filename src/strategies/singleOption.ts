@@ -46,7 +46,7 @@ export default function solveSingleOption(
       sudokuGrid,
       removal: isOnly(cellAnswer),
     })
-    return new Solution({ strategy, cellInit: index, updates })
+    return new Solution({ strategy, cellInit: [index], updates: [updates] })
   }
   return false
 }
