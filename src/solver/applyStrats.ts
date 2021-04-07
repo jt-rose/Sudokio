@@ -136,14 +136,16 @@ export const limitStratsTo = (strategyString: keyof typeof strategyList) => {
     Object.keys(strategyList).findIndex((x) => x.match(strategyString)) + 1
 
   if (upTo === 0) {
-    return false
+    throw new Error(
+      'incorrect strategy type specified in limitStratsTo function'
+    )
   }
   return Object.values(strategyList).slice(0, upTo)
 }
-
+const strategyArray = Object.values(strategyList)
 // apply each strategy in succesion until a hit is found for one round
 export const applyStrats = (
-  stratsUsed: Partial<typeof strategyList> = strategyList
+  stratsUsed: typeof strategyArray = strategyArray
 ) => (sudokuGrid: SudokuGrid) => {
   // check if any of the given strategies result in solution - single sweep of grid
   const strategies = Object.values(stratsUsed)
@@ -165,30 +167,40 @@ export const applyStrats = (
 // applyStratsCurried will default to the full strategyList
 // but can be supplied with a limited list if desired
 
+export class GridUpdate {
+  updatedGrid: SudokuGrid
+  solutions: Solution[] | Solution[][]
+  solved: Boolean
+
+  constructor(
+    updatedGrid: SudokuGrid,
+    solutions: Solution[] | Solution[][],
+    solved: Boolean
+  ) {
+    this.updatedGrid = updatedGrid
+    this.solutions = solutions
+    this.solved = solved
+  }
+}
+
 type ApplyStratsUntilDone = (
-  applyStratsCurried: ReturnType<typeof applyStrats>
+  applyStratsCurried?: ReturnType<typeof applyStrats>
 ) => (
   sudokugrid: SudokuGrid,
-  solutionList: Solution[] | Solution[][],
-  round: number
-) =>
-  | ApplyStratsUntilDone
-  | {
-      updatedGrid: SudokuGrid
-      solutions: Solution[] | Solution[][]
-      solved: Boolean
-    }
+  solutionList?: Solution[] | Solution[][],
+  round?: number
+) => ApplyStratsUntilDone | GridUpdate
 
 export const applyStratsUntilDone: ApplyStratsUntilDone = (
   applyStratsCurried = applyStrats()
 ) => (sudokuGrid, solutionList = [], round = 1) => {
   // recursively transform until no further transformations available - multi sweep
   if (isComplete(sudokuGrid)) {
-    return { updatedGrid: sudokuGrid, solutions: solutionList, solved: true }
+    return new GridUpdate(sudokuGrid, solutionList, true)
   }
   const solutionsFound = applyStratsCurried(sudokuGrid)
   if (solutionsFound === false) {
-    return { updatedGrid: sudokuGrid, solutions: solutionList, solved: false }
+    return new GridUpdate(sudokuGrid, solutionList, false)
   }
   const flattenedSolutions = (solutionsFound as
     | Solution[]
@@ -199,10 +211,12 @@ export const applyStratsUntilDone: ApplyStratsUntilDone = (
   const solutionArray = Array.isArray(bestSolution)
     ? bestSolution
     : [bestSolution]
+
   const solutionWithRound = solutionArray.map((solution) => ({
     ...solution,
     round,
   }))
+
   const updatedGrid = applySolution(sudokuGrid, bestSolution)
   return applyStratsUntilDone(applyStratsCurried)(
     updatedGrid,

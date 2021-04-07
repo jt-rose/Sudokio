@@ -69,6 +69,7 @@ export class Solution {
   startingPaths?: number[]
   totalSolutionsWithRounds?: 'change later' ////
   totalChainRounds?: number
+  round?: number
 
   constructor(solutionInfo: {
     strategy: string
