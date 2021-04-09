@@ -16,6 +16,7 @@ import {
   solveHiddenQuad,
 } from '../strategies/hiddenPairings'
 import { solveXWing, solveSwordfish, solveJellyfish } from '../strategies/fish'
+import { solveXChainFullGrid } from './../strategies/chains'
 
 type Strategy =
   | typeof solveSingleOption
@@ -112,7 +113,7 @@ const normalizeFishStrategies = (strategy: FishStrategy) => (
 // sequentially until a hit is found
 // On the site, non-fullGrid strategies can be applied
 // to specific cells or params if needed with the original strategy
-export const strategyList = {
+const strategyList = {
   solveSingleOptionFullGrid,
   solveSingleParamFullGrid,
   solveBoxNarrowFullGrid,
@@ -127,11 +128,18 @@ export const strategyList = {
   solveJellyfish,
 }
 
+export const fullStrategyList = {
+  ...strategyList,
+  solveXChainFullGrid,
+}
+
 // take the strategyList defined above and provide string-format name
 // of strategy to cut off sequence of strategies applied to sudoku grid
 // for example, providing "solveBoxNarrowFullGrid" will reduce sequence of
 // strategies applied to being just singleOption, singleParam, and BoxNarrow
-export const limitStratsTo = (strategyString: keyof typeof strategyList) => {
+export const limitStratsTo = (
+  strategyString: keyof typeof fullStrategyList
+) => {
   const upTo =
     Object.keys(strategyList).findIndex((x) => x.match(strategyString)) + 1
 
@@ -143,9 +151,10 @@ export const limitStratsTo = (strategyString: keyof typeof strategyList) => {
   return Object.values(strategyList).slice(0, upTo)
 }
 const strategyArray = Object.values(strategyList)
+const fullStrategyArray = Object.values(fullStrategyList)
 // apply each strategy in succesion until a hit is found for one round
 export const applyStrats = (
-  stratsUsed: typeof strategyArray = strategyArray
+  stratsUsed: typeof fullStrategyArray = strategyArray
 ) => (sudokuGrid: SudokuGrid) => {
   // check if any of the given strategies result in solution - single sweep of grid
   const strategies = Object.values(stratsUsed)

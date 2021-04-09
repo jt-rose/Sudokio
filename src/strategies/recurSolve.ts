@@ -7,12 +7,12 @@ import { updateRelCell } from '../utils/solutionObject'
 // for a valid length before attempting this function. The submitted grid
 // should also be formatted with the formatGrid helper function in cellPath.ts
 
-type SolveTraditional = (
+export type SolveTraditional = (
   sudokuGrid: SudokuGrid,
   cellIndex?: number
 ) => SolveTraditional | SudokuGrid | false
 
-const solveTraditional: SolveTraditional = (
+export const solveTraditional: SolveTraditional = (
   sudokuGrid: SudokuGrid,
   cellIndex: number = 0
 ) => {
@@ -40,5 +40,3 @@ const solveTraditional: SolveTraditional = (
   })
   return false
 }
-
-export default solveTraditional

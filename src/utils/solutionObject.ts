@@ -7,6 +7,7 @@ import {
   convertToArray,
 } from './cellPath'
 import * as R from 'ramda'
+import { getTotalSolutionsWithRounds } from '../strategies/chains'
 
 // When formatting updates, answers that have been ruled out are applied
 // to the removal argument in the Update class constrcutor. Occasionally we
@@ -66,8 +67,8 @@ export class Solution {
   updates: Update[] // all updates that will occur
   narrow: Update[] // updates that will narrow possible answers in a cell
   solved: Update[] // updates that will directly solve a cell
-  startingPaths?: number[]
-  totalSolutionsWithRounds?: 'change later' ////
+  startingPaths?: SudokuGrid[]
+  totalSolutionsWithRounds?: any //ReturnType<typeof getTotalSolutionsWithRounds> // recursive type reference
   totalChainRounds?: number
   round?: number
 
@@ -76,8 +77,8 @@ export class Solution {
     cellInit: CellIndex[]
     updates: Update[]
     additionalNotes?: {
-      startingPaths: number[]
-      totalSolutionsWithRounds: 'change later' ////
+      startingPaths: SudokuGrid[]
+      totalSolutionsWithRounds: any //ReturnType<typeof getTotalSolutionsWithRounds>
       totalChainRounds: number
     }
   }) {

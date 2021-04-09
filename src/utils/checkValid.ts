@@ -5,7 +5,11 @@ import {
   formatGrid,
   SudokuGrid,
 } from './cellPath'
-import solveTraditional from '../strategies/recurSolve'
+// explicitly importing type as workaround to ts quirck ts4032
+import {
+  solveTraditional,
+  SolveTraditional as _,
+} from '../strategies/recurSolve'
 
 // These functions are applied to a sudoku puzzle before attempting to
 // to apply the sudokio strategies. function args submitted as:
