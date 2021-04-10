@@ -41,7 +41,7 @@ export default function solveSingleParam(
     (cellFound, i) =>
       new Solution({
         strategy: `singleParam-${paramUsed}`,
-        cellInit: cellFound as number,
+        cellInit: [cellFound] as number[],
         updates: [updates[i]],
       })
   )
