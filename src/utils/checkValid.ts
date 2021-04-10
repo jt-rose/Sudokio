@@ -47,8 +47,22 @@ export const checkNoObviousErrors = (sudokuGrid: SudokuGrid) => {
 
 //checkDB - build after db setup
 
+export interface InvalidPuzzleError {
+  valid: boolean
+  errorType: string
+}
+
+export interface ValidPuzzleCheck {
+  valid: true
+  gridString: string
+  formattedGrid: SudokuGrid
+  solution: false | number[]
+}
+
 // combine checks to confirm puzzle is valid before starting the solver
-export const checkValid = (gridString: string) => {
+export const checkValid = (
+  gridString: string
+): InvalidPuzzleError | ValidPuzzleCheck => {
   if (!checkGridDataType(gridString)) {
     return {
       valid: false,
@@ -97,7 +111,7 @@ export const checkValid = (gridString: string) => {
             solution: DBEntryFound
         };
     }*/
-  const solution = solveTraditional(formattedGrid)
+  const solution = solveTraditional(formattedGrid) as false | number[]
   if (solution) {
     return {
       valid: true,
