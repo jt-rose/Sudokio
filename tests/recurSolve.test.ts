@@ -1,6 +1,6 @@
 import { assert } from 'chai'
 import { SudokuGrid } from '../src/utils/cellPath'
-import solveTraditional from '../src/strategies/recurSolve'
+import { solveTraditional } from '../src/strategies/recurSolve'
 import {
   incorrectGrid,
   basicPuzzleGrid,
