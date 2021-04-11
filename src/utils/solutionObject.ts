@@ -7,7 +7,6 @@ import {
   convertToArray,
 } from './cellPath'
 import * as R from 'ramda'
-import { getTotalSolutionsWithRounds } from '../strategies/chains'
 
 // When formatting updates, answers that have been ruled out are applied
 // to the removal argument in the Update class constrcutor. Occasionally we
