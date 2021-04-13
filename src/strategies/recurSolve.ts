@@ -12,31 +12,32 @@ export type SolveTraditional = (
   cellIndex?: number
 ) => SolveTraditional | SudokuGrid | false
 
-export const solveTraditional: SolveTraditional = (
+export const solveTraditional = (
   sudokuGrid: SudokuGrid,
   cellIndex: number = 0
-) => {
+): SudokuGrid | false => {
   // All cells cleared! Success! Return completed grid.
   if (cellIndex > 80) {
     return sudokuGrid
   }
-  const sudokuCell = sudokuGrid[cellIndex]
-  const isArray = Array.isArray(sudokuCell)
   // move onto next cell if current one is already answered
-  if (!isArray) {
+  if (typeof sudokuGrid[cellIndex] === 'number') {
     return solveTraditional(sudokuGrid, cellIndex + 1)
   }
   // take array of possible answers and attempt each,
   // moving forward and back recursively with each answer
-  ;(sudokuCell as number[]).forEach((num) => {
-    const attemptedGrid = [
-      ...sudokuGrid.slice(0, cellIndex),
-      num,
-      ...sudokuGrid.slice(cellIndex + 1, sudokuGrid.length),
-    ]
-
-    const formattedRelCell = updateRelCell(cellIndex, attemptedGrid)
-    return solveTraditional(formattedRelCell, cellIndex + 1)
-  })
-  return false
+  const attempt = (sudokuGrid[cellIndex] as number[]).reduce(
+    (prev, currentNumber) => {
+      const attemptedGrid = [
+        ...sudokuGrid.slice(0, cellIndex),
+        currentNumber,
+        ...sudokuGrid.slice(cellIndex + 1, sudokuGrid.length),
+      ]
+      const formattedRelCell = updateRelCell(cellIndex, attemptedGrid)
+      const nextStep = solveTraditional(formattedRelCell, cellIndex + 1)
+      return prev !== false ? prev : nextStep
+    },
+    <false | ReturnType<typeof solveTraditional>>false
+  )
+  return attempt
 }

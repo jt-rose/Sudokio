@@ -10,8 +10,6 @@ import {
 describe('Test traditional CS method - recursive backtracking', function () {
   it('correct answer', function () {
     const solved = solveTraditional(basicPuzzleGrid) as SudokuGrid
-    console.log(solved)
-    console.log(basicPuzzleAnswer)
     assert.sameOrderedMembers(solved, basicPuzzleAnswer)
   })
   it('correct rejection', function () {
