@@ -9,11 +9,10 @@ import {
   isOnly,
   Update,
   Solution,
-  filterBest,
-  sortBest,
   updateRelCell,
   applySolution,
 } from '../src/utils/solutionObject'
+import { filterBest, sortBest } from '../src/utils/sortAndFilter'
 import { solveXChainFullGrid } from '../src/strategies/chains'
 import {
   basicPuzzleGrid as sudokuGrid,
@@ -97,7 +96,7 @@ describe('Generate Solution Object', function () {
       })
 
       assert.equal(solutionA.strategy, 'multiParam')
-      assert.equal(solutionA.cellInit, [40])
+      assert.equal(solutionA.cellInit[0], 40)
       assert.sameOrderedMembers(solutionA.removal, [1, 2, 3, 4, 6, 7, 8, 9])
       assert.sameOrderedMembers(solutionA.updates[0].updatedAnswer, [5])
       assert.equal(solutionA.updates.length, 1)
@@ -116,7 +115,7 @@ describe('Generate Solution Object', function () {
       })
 
       assert.equal(solutionB.strategy, 'testing123')
-      assert.sameOrderedMembers(solutionB.cellInit as number[], [
+      assert.sameOrderedMembers(solutionB.cellInit, [
         54,
         55,
         56,
@@ -130,7 +129,7 @@ describe('Generate Solution Object', function () {
       assert.sameOrderedMembers(solutionB.removal, [2, 9])
       assert.equal(solutionB.updates[1].index, 72)
       assert.sameDeepOrderedMembers(solutionB.updates[1].updatedAnswer, [1, 3])
-      assert.equal((solutionB.updates as Update[]).length, 2)
+      assert.equal(solutionB.updates.length, 2)
       assert.equal(solutionB.narrow[1].index, 72)
       assert.sameDeepOrderedMembers(solutionB.narrow[1].updatedAnswer, [1, 3])
       assert.equal(solutionB.narrow.length, 2)
@@ -147,7 +146,7 @@ describe('Generate Solution Object', function () {
       })
 
       assert.equal(solutionC.strategy, 'singleParam')
-      assert.equal(solutionC.cellInit, [62])
+      assert.equal(solutionC.cellInit[0], 62)
       assert.sameOrderedMembers(solutionC.removal, [3])
       assert.sameOrderedMembers(solutionC.updates[1].updatedAnswer, [1, 2])
       assert.equal((solutionC.updates as Update[]).length, 2)
@@ -224,7 +223,7 @@ describe('Generate Solution Object', function () {
       assert.deepEqual(filterBest(solutionDE), solutionD) // both have one narrow, but one is closer to being solved
 
       // test bestFilter on X-Chain
-      const xChainFullGridAnswer = solveXChainFullGrid(xChainGrid)
+      const xChainFullGridAnswer = solveXChainFullGrid(xChainGrid) as Solution[]
       const bestXChain = filterBest(xChainFullGridAnswer) as Solution
 
       assert.equal(xChainFullGridAnswer.length, 12)
@@ -232,8 +231,6 @@ describe('Generate Solution Object', function () {
         ...new Set(xChainFullGridAnswer.map((x) => x.totalChainRounds)),
       ]
       assert.sameMembers(totalRoundsFound, [1, 2, 3, 4])
-
-      assert.equal([].concat(bestXChain).length, 1)
       assert.equal(bestXChain.totalChainRounds, 1)
     })
   })
@@ -264,7 +261,7 @@ describe('Generate Solution Object', function () {
       const xChainGrid = formatGrid(
         '270060540050127080000400270000046752027508410500712908136274895785001024002000107'
       )
-      const xChainFullGridAnswer = solveXChainFullGrid(xChainGrid)
+      const xChainFullGridAnswer = solveXChainFullGrid(xChainGrid) as Solution[]
       const sortedXChainAnswers = sortBest(xChainFullGridAnswer) as Solution[]
 
       const unsortedTotalRounds = [

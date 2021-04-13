@@ -1,9 +1,10 @@
 import { assert } from 'chai'
 import {
   applyStrats,
-  limitStratsTo,
   applyStratsUntilDone,
   GridUpdate,
+  solveSingleOptionFullGrid,
+  solveSingleParamFullGrid,
 } from '../src/solver/applyStrats'
 import { Solution } from '../src/utils/solutionObject'
 import {
@@ -19,9 +20,9 @@ import {
 
 describe('Apply singleParam-focused solution to multiple params', function () {
   it('valid multiple returns', function () {
-    const solutionList = applyStrats(
-      limitStratsTo('solveSingleOptionFullGrid')
-    )(basicPuzzleGrid) as Solution[]
+    const solutionList = applyStrats([solveSingleOptionFullGrid])(
+      basicPuzzleGrid
+    ) as Solution[]
     assert.equal(solutionList.length, 4)
 
     const cellsFound = solutionList.map((x) => x.cellInit)
@@ -53,9 +54,7 @@ describe('Apply series of strategies to grid', function () {
       [1, 21, 29, 37]
     )
 
-    const upToSingleParam = applyStrats(
-      limitStratsTo('solveSingleParamFullGrid')
-    )
+    const upToSingleParam = applyStrats([solveSingleParamFullGrid])
     const boxNarrowNotFound = upToSingleParam(swordfishGrid1)
     assert.equal(boxNarrowNotFound, false)
     const answerFound = stratCycle(swordfishGrid1) as Solution[]

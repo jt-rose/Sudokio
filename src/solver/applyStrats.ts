@@ -77,7 +77,7 @@ export const solveEach = (strategy: StrategyAcrossGridParamSets) => (
   return allSolutions.length > 0 ? allSolutions : false*/
 }
 
-const solveSingleOptionFullGrid = (sudokuGrid: SudokuGrid) => {
+export const solveSingleOptionFullGrid = (sudokuGrid: SudokuGrid) => {
   const solutionsFound = CP.allIndex
     .map((index) => solveSingleOption(sudokuGrid, index))
     .filter((x) => x !== false)
@@ -88,7 +88,7 @@ const solveSingleOptionFullGrid = (sudokuGrid: SudokuGrid) => {
 // Apply strategies to full grid for a "standard" search
 // fish strategies are already built to scan full grid and don't need this
 //const solveSingleOptionFullGrid = solveEach(solveSingleOption)(CP.allIndex)
-const solveSingleParamFullGrid = solveEach(solveSingleParam)(CP.allSets)
+export const solveSingleParamFullGrid = solveEach(solveSingleParam)(CP.allSets)
 const solveBoxNarrowFullGrid = solveEach(solveBoxNarrow)(CP.boxSets)
 const solveNakedPairFullGrid = solveEach(solveNakedPair)(CP.allSets)
 const solveNakedTripleFullGrid = solveEach(solveNakedTriple)(CP.allSets)
@@ -113,7 +113,7 @@ const normalizeFishStrategies = (strategy: FishStrategy) => (
 // sequentially until a hit is found
 // On the site, non-fullGrid strategies can be applied
 // to specific cells or params if needed with the original strategy
-const strategyList = {
+const strategyList = [
   solveSingleOptionFullGrid,
   solveSingleParamFullGrid,
   solveBoxNarrowFullGrid,
@@ -126,38 +126,15 @@ const strategyList = {
   solveXWing,
   solveSwordfish,
   solveJellyfish,
-}
+]
 
-export const fullStrategyList = {
-  ...strategyList,
-  solveXChainFullGrid,
-}
+export const fullStrategyList = [...strategyList, solveXChainFullGrid]
 
-// take the strategyList defined above and provide string-format name
-// of strategy to cut off sequence of strategies applied to sudoku grid
-// for example, providing "solveBoxNarrowFullGrid" will reduce sequence of
-// strategies applied to being just singleOption, singleParam, and BoxNarrow
-export const limitStratsTo = (
-  strategyString: keyof typeof fullStrategyList
-) => {
-  const upTo =
-    Object.keys(strategyList).findIndex((x) => x.match(strategyString)) + 1
-
-  if (upTo === 0) {
-    throw new Error(
-      'incorrect strategy type specified in limitStratsTo function'
-    )
-  }
-  return Object.values(strategyList).slice(0, upTo)
-}
-const strategyArray = Object.values(strategyList)
-const fullStrategyArray = Object.values(fullStrategyList)
 // apply each strategy in succesion until a hit is found for one round
-export const applyStrats = (
-  stratsUsed: typeof fullStrategyArray = strategyArray
-) => (sudokuGrid: SudokuGrid) => {
+export const applyStrats = (strategies: typeof strategyList = strategyList) => (
+  sudokuGrid: SudokuGrid
+) => {
   // check if any of the given strategies result in solution - single sweep of grid
-  const strategies = Object.values(stratsUsed)
   if (strategies.length === 0) {
     throw new Error('must specify at least one strategy type')
   }

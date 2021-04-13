@@ -1,4 +1,4 @@
-import prompt from "prompt";
+/*import prompt from "prompt";
 import { cellPath as CP } from "./solvers/cellPath";
 import checkAndSolve from "./solvers/checkAndSolve";
 import {
@@ -149,3 +149,4 @@ openingMessages.forEach((msg, i) => {
 });
 
 setTimeout(() => testUserGrid(), (700 * openingMessages.length));
+*/

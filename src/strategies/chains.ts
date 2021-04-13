@@ -6,7 +6,7 @@ import {
   applySolution,
 } from '../utils/solutionObject'
 
-import { applyStrats, limitStratsTo } from '../solver/applyStrats'
+import { applyStrats, solveSingleOptionFullGrid } from '../solver/applyStrats'
 
 import * as R from 'ramda' /*
   // if no shared changes, attempt next round of updates
@@ -90,7 +90,7 @@ export const solveXChainFullGrid = (sudokuGrid: SudokuGrid) => {
   if (solutionsFound.length === 0) return false
   return solutionsFound as Solution[]
 }
-*/
+*/ //////////////////////////////////// //redo
 
 // 7. A chain finds a divergent pair (or more) of different possible answers
 // for a cell (for example, [7,8]) and plays out what will happen if we guess
@@ -301,10 +301,7 @@ sudokuGrid.map((cell, index) => ({ index, variations: currentPaths.map( altCell 
       totalChainRounds: round,
     }
   }
-*/ ////////////////////////////////////
-//redo
-
-const chainTemplate = (
+*/ const chainTemplate = (
   applyStrategies: ReturnType<typeof applyStrats> = applyStrats(),
   description: string
 ) => (sudokuGrid: SudokuGrid, index: number) => {
@@ -454,7 +451,7 @@ const findChainOverlapUpdates = (
 
 // solves x-chain on single cell
 export const solveXChain = chainTemplate(
-  applyStrats(limitStratsTo('solveSingleOptionFullGrid')),
+  applyStrats([solveSingleOptionFullGrid]),
   'X-Chain'
 )
 

@@ -1,6 +1,7 @@
 import { assert } from 'chai'
 import { getRow } from '../src/utils/cellPath'
-import { filterBest, Solution, Update } from '../src/utils/solutionObject'
+import { Solution, Update } from '../src/utils/solutionObject'
+import { filterBest } from '../src/utils/sortAndFilter'
 import {
   solveNakedPair,
   solveNakedTriple,
@@ -23,7 +24,10 @@ import {
 describe('Solve Naked Pairings', function () {
   describe('Solve Naked Pairs', function () {
     it('correct solution for single pair', function () {
-      const solution = solveNakedPair(singleNakedPairGrid, getRow(54))[0]
+      const solution = (solveNakedPair(
+        singleNakedPairGrid,
+        getRow(54)
+      ) as Solution[])[0]
 
       assert.equal(solution.strategy, 'nakedPair')
       assert.sameOrderedMembers(solution.cellInit, [57, 58])
@@ -131,7 +135,10 @@ describe('Solve Naked Pairings', function () {
   })
   describe('Solve Naked Triples', function () {
     it('correct solution for single Triple', function () {
-      const solution = solveNakedTriple(singleNakedTripleGrid, getRow(0))[0]
+      const solution = (solveNakedTriple(
+        singleNakedTripleGrid,
+        getRow(0)
+      ) as Solution[])[0]
 
       assert.equal(solution.strategy, 'nakedTriple')
       assert.sameOrderedMembers(solution.cellInit, [0, 1, 2])
@@ -352,7 +359,10 @@ describe('Solve Naked Pairings', function () {
   })
   describe('Solve Naked Quads', function () {
     it('correct solution for single Quad', function () {
-      const solution = solveNakedQuad(singleNakedQuadGrid, getRow(0))[0]
+      const solution = (solveNakedQuad(
+        singleNakedQuadGrid,
+        getRow(0)
+      ) as Solution[])[0]
 
       assert.equal(solution.strategy, 'nakedQuad')
       assert.sameOrderedMembers(solution.cellInit, [1, 3, 6, 7])

@@ -313,10 +313,12 @@ describe('Create cell references for related rows, columns, boxes', function () 
       assert.equal(stringRevert.slice(78, 81), '079')
     })
     it('reject if length of string/ array not equal 81', function () {
-      expect(() => basicPuzzleGridString.concat('0')).toThrowError()
+      const tooLong = basicPuzzleGridString + '0'
+      expect(() => toGridArray(tooLong)).toThrowError()
       //assert.equal(toGridArray(basicPuzzleGridString.concat("0")), false);
       const gridArray = toGridArray(basicPuzzleGridString)
-      expect(() => toGridString(gridArray.slice(0, 80))).toThrowError()
+      const tooShort = gridArray.slice(0, 80)
+      expect(() => toGridString(tooShort)).toThrowError()
       //assert.equal(toGridString(gridArray.slice(0, 80)), false);
     })
     it("convert subarrays to '0' in string format", function () {

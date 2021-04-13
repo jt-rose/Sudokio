@@ -10,7 +10,7 @@ export const strategyListWithChains = {
     solveXChainFullGrid
 };
 */
-const applyStratsWithChains = applyStrats(Object.values(fullStrategyList))
+const applyStratsWithChains = applyStrats(fullStrategyList)
 
 // attempts to fully solve grid, using variety of human strategies
 // while searching for the easiest and most effective solutions

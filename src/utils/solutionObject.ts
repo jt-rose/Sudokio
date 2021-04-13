@@ -86,7 +86,7 @@ export class Solution {
     this.strategy = strategy
     this.cellInit = cellInit
     this.updates = updates
-    this.removal = updates.flatMap((u) => u.removal) //
+    this.removal = [...new Set(updates.flatMap((u) => u.removal))] //
     this.narrow = updates.filter((x) => x.updatedAnswer.length > 1)
     this.solved = updates.filter((x) => x.updatedAnswer.length === 1)
 

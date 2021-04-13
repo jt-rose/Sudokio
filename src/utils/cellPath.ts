@@ -20,37 +20,6 @@ export type SudokuGrid = (number | number[])[]
 
 /* ------- util functions to traverse sudoku puzzle and analyze values ------ */
 
-// This is a restructured cellPath using FP to simplify the codebase
-const paramLength = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-
-const allIndex = R.range(0, 81)
-const rowSets = paramLength.map((x) => getRow(x * 9))
-const rowIndex = allIndex.map((x) => getRow(x))
-const rowNumber = allIndex.map((x) => getRowNumber(x))
-const columnSets = paramLength.map((x) => getColumn(x))
-const columnIndex = allIndex.map((x) => getColumn(x))
-const columnNumber = allIndex.map((x) => getColumnNumber(x))
-const boxSets = [0, 3, 6, 27, 30, 33, 54, 57, 60].map((x) => getBox(x)) // box starting parameters
-const allSets = [...rowSets, ...columnSets, ...boxSets]
-const boxIndex = allIndex.map((x) => getBox(x))
-const boxNumber = allIndex.map((x) => getBoxNumber(x))
-const relCell = allIndex.map((x) => getRelCell(x))
-
-export const cellPath = {
-  allIndex,
-  allSets,
-  rowSets,
-  rowIndex,
-  rowNumber,
-  columnSets,
-  columnIndex,
-  columnNumber,
-  boxSets,
-  boxIndex,
-  boxNumber,
-  relCell,
-}
-
 // Get rows, columns, and boxes related to each cell
 export const getRow = (cellIndex: CellIndex) => {
   const rowStart = cellIndex - (cellIndex % 9)
@@ -93,6 +62,46 @@ export function includesEach(gridParam: GridParam, paramSet: ParamSet) {
   return paramSet.every((x) => gridParam.includes(x))
 }
 
+// This is a restructured cellPath using FP to simplify the codebase
+const paramLength = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+
+const allIndex = R.range(0, 81)
+const rowSets = paramLength.map((x) => getRow(x * 9))
+const rowIndex = allIndex.map((x) => getRow(x))
+const rowNumber = allIndex.map((x) => getRowNumber(x))
+const columnSets = paramLength.map((x) => getColumn(x))
+const columnIndex = allIndex.map((x) => getColumn(x))
+const columnNumber = allIndex.map((x) => getColumnNumber(x))
+const boxSets = [0, 3, 6, 27, 30, 33, 54, 57, 60].map((x) => getBox(x)) // box starting parameters
+const allSets = [...rowSets, ...columnSets, ...boxSets]
+const boxIndex = allIndex.map((x) => getBox(x))
+const boxNumber = allIndex.map((x) => getBoxNumber(x))
+
+export function getRelCell(cellIndex: CellIndex) {
+  const allRelCell = getRow(cellIndex).concat(
+    getColumn(cellIndex),
+    getBox(cellIndex)
+  )
+  return [...new Set(allRelCell)]
+}
+
+const relCell = allIndex.map((x) => getRelCell(x))
+
+export const cellPath = {
+  allIndex,
+  allSets,
+  rowSets,
+  rowIndex,
+  rowNumber,
+  columnSets,
+  columnIndex,
+  columnNumber,
+  boxSets,
+  boxIndex,
+  boxNumber,
+  relCell,
+}
+
 // find which row, column, or box the cell index are found in
 export function getParam(gridParam: GridParam) {
   if (gridParam.length === 9) {
@@ -107,14 +116,6 @@ export function getParam(gridParam: GridParam) {
     }
   }
   return false
-}
-
-export function getRelCell(cellIndex: CellIndex) {
-  const allRelCell = getRow(cellIndex).concat(
-    getColumn(cellIndex),
-    getBox(cellIndex)
-  )
-  return [...new Set(allRelCell)]
 }
 
 export function getOpen(gridParam: GridParam, sudokuGrid: SudokuGrid) {

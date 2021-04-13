@@ -53,30 +53,36 @@ describe('Check User submitted grids are valid', function () {
   it('combine above to perform complete checkValid function', function () {
     const confirmValid = checkValid(basicPuzzleGridString)
     assert.equal(confirmValid.valid, true)
+    // @ts-ignore
+    console.log(confirmValid.errorType)
 
     // @ts-ignore
     const confirmInvalidDataType = checkValid(wrongDataType)
     const invalidDataTypeMSG =
       'The submitted grid must be submitted as an 81 character string with 0 representing unsolved cells'
     assert.equal(confirmInvalidDataType.valid, false)
+    // @ts-ignore
     assert.equal(confirmInvalidDataType.errorType, invalidDataTypeMSG)
 
     const confirmInvalidLength = checkValid(gridStringTooShort)
     const invalidLengthMSG =
       'The submitted grid is not the right length and should have exactly 81 characters'
     assert.equal(confirmInvalidLength.valid, false)
+    // @ts-ignore
     assert.equal(confirmInvalidLength.errorType, invalidLengthMSG)
 
     const confirmInvalidAmountSolved = checkValid(gridStringNotEnoughAnswers)
     const invalidAmountSolvedMSG =
       'The submitted grid should have at least 16 cells answered to eb a valid sudoku puzzle'
     assert.equal(confirmInvalidAmountSolved.valid, false)
+    // @ts-ignore
     assert.equal(confirmInvalidAmountSolved.errorType, invalidAmountSolvedMSG)
 
     const confirmInvalidCharacters = checkValid(gridStringWithLetters)
     const invalidCharactersMSG =
       'The submitted grid should only have numbers 0-9, with 0 representing an unsolved cell'
     assert.equal(confirmInvalidCharacters.valid, false)
+    // @ts-ignore
     assert.equal(confirmInvalidCharacters.errorType, invalidCharactersMSG)
 
     const confirmInvalidContradictions = checkValid(
@@ -86,6 +92,7 @@ describe('Check User submitted grids are valid', function () {
       'The submitted grid has an error, with a number occuring more than once in the same row, column, or box'
     assert.equal(confirmInvalidContradictions.valid, false)
     assert.equal(
+      // @ts-ignore
       confirmInvalidContradictions.errorType,
       invalidContradictionsMSG
     )
@@ -94,6 +101,7 @@ describe('Check User submitted grids are valid', function () {
     const invalidHiddenErrorMSG =
       'Our solver has shown that this puzzle is invalid and has an error'
     assert.equal(confirmInvalidAfterAttempt.valid, false)
+    // @ts-ignore
     assert.equal(confirmInvalidAfterAttempt.errorType, invalidHiddenErrorMSG)
   })
 })
