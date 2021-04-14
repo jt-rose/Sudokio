@@ -16,7 +16,7 @@ import {
   solveHiddenQuad,
 } from '../strategies/hiddenPairings'
 import { solveXWing, solveSwordfish, solveJellyfish } from '../strategies/fish'
-import { solveXChainFullGrid } from './../strategies/chains'
+//import { solveXChainFullGrid } from './../strategies/chains'
 
 type Strategy =
   | typeof solveSingleOption
@@ -128,7 +128,7 @@ const strategyList = [
   solveJellyfish,
 ]
 
-export const fullStrategyList = [...strategyList, solveXChainFullGrid]
+//export const fullStrategyList = [...strategyList, solveXChainFullGrid]
 
 // apply each strategy in succesion until a hit is found for one round
 export const applyStrats = (strategies: typeof strategyList = strategyList) => (

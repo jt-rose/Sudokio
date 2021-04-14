@@ -26,7 +26,7 @@ describe('Apply singleParam-focused solution to multiple params', function () {
     assert.equal(solutionList.length, 4)
 
     const cellsFound = solutionList.map((x) => x.cellInit)
-    assert.sameMembers(cellsFound, [[40], [59], [62], [70]])
+    assert.sameDeepMembers(cellsFound, [[40], [59], [62], [70]])
   })
 })
 describe('Apply series of strategies to grid', function () {
