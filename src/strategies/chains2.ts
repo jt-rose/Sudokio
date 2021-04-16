@@ -113,12 +113,15 @@ const findChainOverlapUpdates = (
   const holder = R.repeat([], 81)
 
   //
-  const combinedAnswerOptions = holder.map((answerOptions, index) =>
-    currentPaths.map((path) => path[index]).flat()
-  )
+  //const combinedAnswerOptions = holder.map((answerOptions, index) =>
+  //currentPaths.map((path) => path[index]).flat()
+  //)
   //
   const sharedUpdates = currentPaths
-    .reduce((prev, curr) => prev.map((x, i) => x.concat(curr[i])), holder)
+    .reduce(
+      (prev, curr) => prev.map((x, i) => (x as number[]).concat(curr[i])),
+      holder
+    )
     .map((x, i) => ({
       index: i,
       answerOptions: R.range(1, 10).filter(
